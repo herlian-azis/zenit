@@ -70,25 +70,27 @@ export default function HeadphoneScroll() {
       const img = images[frameIdx];
 
       if (img && img.complete && img.naturalWidth > 0) {
-        // Set canvas size to match image aspect ratio
+        // Set canvas size to match container
         const aspectRatio = img.naturalWidth / img.naturalHeight;
         const containerWidth = canvas.parentElement?.clientWidth || window.innerWidth;
         const containerHeight = canvas.parentElement?.clientHeight || window.innerHeight;
 
-        // Calculate dimensions to fit contain
+        // Calculate dimensions to COVER (fill entire screen)
         let drawWidth, drawHeight;
         if (containerWidth / containerHeight > aspectRatio) {
-          drawHeight = containerHeight;
-          drawWidth = drawHeight * aspectRatio;
-        } else {
+          // Container is wider - scale to width
           drawWidth = containerWidth;
           drawHeight = drawWidth / aspectRatio;
+        } else {
+          // Container is taller - scale to height
+          drawHeight = containerHeight;
+          drawWidth = drawHeight * aspectRatio;
         }
 
         canvas.width = containerWidth;
         canvas.height = containerHeight;
 
-        // Center the image
+        // Center the image (some parts may be cropped)
         const x = (containerWidth - drawWidth) / 2;
         const y = (containerHeight - drawHeight) / 2;
 
@@ -129,13 +131,13 @@ export default function HeadphoneScroll() {
       {/* Sticky Canvas Container */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         {isLoading ? (
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-4 md:gap-6 px-4">
             {/* Loading Spinner */}
             <div className="relative">
-              <div className="w-16 h-16 border-2 border-white/10 rounded-full" />
-              <div className="absolute top-0 left-0 w-16 h-16 border-2 border-transparent border-t-white/80 rounded-full animate-spin" />
+              <div className="w-12 h-12 md:w-16 md:h-16 border-2 border-white/10 rounded-full" />
+              <div className="absolute top-0 left-0 w-12 h-12 md:w-16 md:h-16 border-2 border-transparent border-t-white/80 rounded-full animate-spin" />
             </div>
-            <div className="text-white/60 text-sm tracking-wider uppercase">
+            <div className="text-white/60 text-xs md:text-sm tracking-wider uppercase">
               Loading {loadProgress}%
             </div>
           </div>
@@ -158,10 +160,10 @@ export default function HeadphoneScroll() {
             end={0.15}
             position="center"
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-gradient">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-gradient">
               Zenith X
             </h1>
-            <p className="text-xl md:text-2xl text-white/60 mt-4 tracking-wide">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/60 mt-2 md:mt-4 tracking-wide">
               Pure Sound.
             </p>
           </TextOverlay>
@@ -173,12 +175,12 @@ export default function HeadphoneScroll() {
             end={0.4}
             position="left"
           >
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white/90">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white/90">
               Precision
               <br />
               Engineering.
             </h2>
-            <p className="text-lg md:text-xl text-white/60 mt-4 max-w-md">
+            <p className="text-base sm:text-lg md:text-xl text-white/60 mt-2 md:mt-4 max-w-[280px] sm:max-w-sm md:max-w-md">
               Every component meticulously crafted for acoustic perfection.
             </p>
           </TextOverlay>
@@ -190,12 +192,12 @@ export default function HeadphoneScroll() {
             end={0.65}
             position="right"
           >
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white/90">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white/90">
               Titanium
               <br />
               Drivers.
             </h2>
-            <p className="text-lg md:text-xl text-white/60 mt-4 max-w-md">
+            <p className="text-base sm:text-lg md:text-xl text-white/60 mt-2 md:mt-4 max-w-[280px] sm:max-w-sm md:max-w-md">
               50mm custom drivers delivering unparalleled clarity and depth.
             </p>
           </TextOverlay>
@@ -207,10 +209,10 @@ export default function HeadphoneScroll() {
             end={0.95}
             position="center"
           >
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-gradient">
+            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter text-gradient px-4">
               Hear Everything.
             </h2>
-            <button className="mt-8 px-8 py-4 bg-white text-black font-semibold text-lg rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105">
+            <button className="mt-4 md:mt-8 px-6 py-3 md:px-8 md:py-4 bg-white text-black font-semibold text-base md:text-lg rounded-full hover:bg-white/90 transition-all duration-300 hover:scale-105 active:scale-95">
               Pre-Order Now
             </button>
           </TextOverlay>
@@ -249,9 +251,9 @@ function TextOverlay({
   );
 
   const positionClasses = {
-    left: "left-8 md:left-16 lg:left-24 text-left items-start",
-    center: "left-1/2 -translate-x-1/2 text-center items-center",
-    right: "right-8 md:right-16 lg:right-24 text-right items-end",
+    left: "left-4 sm:left-6 md:left-16 lg:left-24 text-left items-start max-w-[85%] sm:max-w-none",
+    center: "left-1/2 -translate-x-1/2 text-center items-center w-full px-4 sm:px-6 md:px-0",
+    right: "right-4 sm:right-6 md:right-16 lg:right-24 text-right items-end max-w-[85%] sm:max-w-none",
   };
 
   return (
